@@ -1,5 +1,5 @@
 import { AuthService } from './auth.service';
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req } from '@nestjs/common';
 
 @Controller('auths')
 export class AuthController {
@@ -11,7 +11,7 @@ export class AuthController {
   }
 
   @Post('/signin')
-  signIn(@Body() data: any): Promise<{ accessToken: string }> {
-    return this.authService.signIn(data);
+  signIn(@Body() data: any, @Req() req: any): Promise<{ accessToken: string }> {
+    return this.authService.signIn(data, req);
   }
 }

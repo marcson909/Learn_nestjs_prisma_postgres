@@ -43,9 +43,10 @@ export class AuthService {
     }
   }
 
-  async signIn(data: any): Promise<{ accessToken: string }> {
+  async signIn(data: any, req: any): Promise<{ accessToken: string }> {
     const { email, password } = data;
-
+    const role = req.header('role');
+    console.log('role', role);
     if (!email) throw new NotFoundException('Email is required');
 
     // Check password empty
@@ -64,7 +65,7 @@ export class AuthService {
 
       if (!validPass) throw new UnauthorizedException();
       else {
-        const accessToken: string = await this.jwtService.sign({ email });
+        const accessToken: string = await this.jwtService.sign({ email, role });
         console.log('accessToken', accessToken);
         return { accessToken };
       }

@@ -13,6 +13,9 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateTaskDto } from 'src/dto/task.dto';
+import { Role } from '../roles/role.enum';
+import { Roles } from '../roles/roles.decorator';
+import { RolesGuard } from '../roles/roles.guard';
 import { TasksService } from './tasks.service';
 
 @Controller('tasks')
@@ -26,7 +29,10 @@ export class TasksController {
   }
 
   @Get()
-  getTasks(@Query() query: any): Promise<any> {
+  @Roles(Role.User)
+  @UseGuards(RolesGuard)
+  getTasks(@Query() query: any, @Req() req: any): Promise<any> {
+    console.log('user_getTask', req?.user);
     return this.tasksService.getTasks(query);
   }
 
